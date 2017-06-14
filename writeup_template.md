@@ -1,47 +1,25 @@
 # **Finding Lane Lines on the Road** 
+## Reflection
 
-## Writeup Template
+My pipeline consisted of 5 steps. First, I converted the images to grayscale, then I blurred image using gaussian blur function with
+kernel size of 7. Then used Canny edge detection method to detect edges. I tweaked lo and high thresholds several times. Then defined
+ROI to get masked edges. Used masked edge images to detect lines using Hough transform. 
 
-### You can use this file as a template for your writeup if you want to submit it as a markdown file. But feel free to use some other method and submit a pdf if you prefer.
-
----
-
-**Finding Lane Lines on the Road**
-
-The goals / steps of this project are the following:
-* Make a pipeline that finds lane lines on the road
-* Reflect on your work in a written report
-
-
-[//]: # (Image References)
-
-[image1]: ./examples/grayscale.jpg "Grayscale"
-
----
-
-### Reflection
-
-### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
-
-My pipeline consisted of 5 steps. First, I converted the images to grayscale, then I .... 
-
-In order to draw a single line on the left and right lanes, I modified the draw_lines() function by ...
-
-If you'd like to include images to show how the pipeline works, here is how to include an image: 
-
-![alt text][image1]
+In order to draw a single line on the left and right lanes, I modified draw_lines() fucntion to group lines detected in to
+left lane ( postive slope) and right lane( negative slope). used soem threshodlgin to elimintate horizontal lines. 
+After grouping all the points taht define each line in the output of Hough transform, used fitlien method to define a line
+that best fits points in each group. The slope and intercept of each best fit line is calculated. Chose starting and ending
+Y-coordinate value taht rmaisn same for both lanes. Used the x = (y - b)/m to calculate the start and end x coordinates for each lane.
 
 
-### 2. Identify potential shortcomings with your current pipeline
+## 2. Identify potential shortcomings with your current pipeline
+Parameters used to define ROI, canny edge detection adn hough transform are suitable for given camera mounting position.
+If camera position changes the pipline may not be able to adapt accoprdinly to fix the issue
+Also, for video frames, soem fmraes were missing lane lines as my algorithm failed to find lines that match the criteria. This
 
 
-One potential shortcoming would be what would happen when ... 
+## 3. Suggest possible improvements to your pipeline
 
-Another shortcoming could be ...
-
-
-### 3. Suggest possible improvements to your pipeline
-
-A possible improvement would be to ...
-
-Another potential improvement could be to ...
+Improve draw_lines algorithm to not miss lane lines entirely.
+Use better polynomial fitting models to group hough tanrasform line points into lanes to cover curves
+Learn the camera position and adapt the ROI and other parameters accordingly
